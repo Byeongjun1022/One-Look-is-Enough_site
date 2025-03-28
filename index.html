@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A Novel Seamless Patchwise Refinement for Zero-Shot  Monocular Depth Estimation Models on High-Resolution Images">
+  <meta name="keywords" content="depth, estimation, monocular, scene, reconstruction, refinement, patchwise, patch, high-resolution">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image:src" content="http://marigoldmonodepth.github.io/images/marigold_logo_square.jpg">
+  <meta name="twitter:title" content="Marigold Depth">
+  <meta name="twitter:description" content="Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation">
+  <meta name="twitter:creator" content="@AntonObukhov1">
+
+  <title>One Look is Enough: A Novel Seamless Patchwise Refinement for Zero-Shot  Monocular Depth Estimation Models on High-Resolution Images</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FWSVCGZTG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-1FWSVCGZTG');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./css/twentytwenty.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="icon" href="./images/eye.svg">
+
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery.event.move.js"></script>
+  <script src="./js/jquery.twentytwenty.js"></script>
+  <script src="./js/bulma-carousel.min.js"></script>
+  <script src="./js/bulma-slider.min.js"></script>
+  <script src="./js/fontawesome.all.min.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <!--MathJax-->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <div class="title is-2 publication-title"><h1 style="display: inline; clear:none;">
+                        <b>One Look is Enough:</b> <br>
+                        A Novel Seamless Patchwise Refinement for Zero-Shot Monocular Depth Estimation Models on High-Resolution Images
+                    </h1>
+
+                        <div class="title is-2 publication-title">
+                        </div>
+                    </div>
+                    <div class="is-size-5 publication-authors" style="margin-bottom: 20px;">
+            <span class="author-block">
+              <a target="_blank" rel="noopener noreferrer" href="https://scholar.google.com/citations?hl=ko&user=gZRpDIkAAAAJ">Byeongjun Kwon</a></sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	        </span>
+                        <span class="author-block">
+              <a target="_blank" rel="noopener noreferrer"
+                 href="https://scholar.google.com/citations?hl=ko&user=bGXte_4AAAAJ">Munchurl Kim</a><sup>†</sup>
+            </span>
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"></sup>†Corresponding Author</span>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"></sup>Korea Advanced Institute of Science and Technology (KAIST), South Korea</span>
+                    </div>
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                            <!-- PDF Link. -->
+                            <span class="link-block">
+                <a target="_blank" rel="noopener noreferrer" href="https://arxiv.org"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+                            <span class="link-block">
+                <a target="_blank" rel="noopener noreferrer" href="https://arxiv.org"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+                            <!-- Code Link. -->
+                            <span class="link-block">
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/KAIST-VICLab/One-Look-is-Enough"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<section class="section pt-0">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            We propose <span class="methodname">PRO</span>, an efficient and generalizable tile-based depth refinement framework. Our PRO consists of two key components: <b>(i) Grouped Patch Consistency Training</b> that enhances
+            test-time efficiency while mitigating the depth discontinuity problem, and <b>(ii) Bias Free Masking</b> that prevents the depth refinement models from overfitting to dataset-specific biases, 
+            enabling better generalization to real-world datasets even after training on synthetic data.
+          </p>
+
+          <p>
+            The gallery below presents several images from the internet and refinement results of PRO (Ours) based on DepthAnythingv2. Use the slider and gestures to reveal details on both sides.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section pt-0 pb-4">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Gallery</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body pt-0">
+    <div class="container">
+      <div id="results-carousel-vertical" class="carousel results-carousel">
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/tommao-wang-hhLontN4yKM-unsplash.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/tommao-wang-hhLontN4yKM-unsplash.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/tommao-wang-hhLontN4yKM-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/tommao-wang-hhLontN4yKM-unsplash.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/martin-baron-jIqjz1yrpoI-unsplash.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/martin-baron-jIqjz1yrpoI-unsplash.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/martin-baron-jIqjz1yrpoI-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/martin-baron-jIqjz1yrpoI-unsplash.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/toa-heftiba-CMNPF9qoR0Y-unsplash_image.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/toa-heftiba-CMNPF9qoR0Y-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/toa-heftiba-CMNPF9qoR0Y-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/toa-heftiba-CMNPF9qoR0Y-unsplash_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/daniel-sessler-PfNiYs801ak-unsplash_image.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/daniel-sessler-PfNiYs801ak-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/daniel-sessler-PfNiYs801ak-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/daniel-sessler-PfNiYs801ak-unsplash_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/danny-greenberg-sk1hOUEhS2I-unsplash.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/danny-greenberg-sk1hOUEhS2I-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/danny-greenberg-sk1hOUEhS2I-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/danny-greenberg-sk1hOUEhS2I-unsplash_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/claudio-schwarz-2prT8pqsKdA-unsplash_image.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/claudio-schwarz-2prT8pqsKdA-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/claudio-schwarz-2prT8pqsKdA-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/claudio-schwarz-2prT8pqsKdA-unsplash_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/vertical/vincent-chan-NJHgBi05xlQ-unsplash_image.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/vincent-chan-NJHgBi05xlQ-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/vertical/vincent-chan-NJHgBi05xlQ-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/vertical/vincent-chan-NJHgBi05xlQ-unsplash_ours.png">
+            </div>
+          </div>
+        </div> -->
+
+
+        
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small mt-4">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel-horizontal" class="carousel results-carousel">
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/declan-sun-ZUOG4MkDgbE-unsplash_image.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/declan-sun-ZUOG4MkDgbE-unsplash_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/declan-sun-ZUOG4MkDgbE-unsplash_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/declan-sun-ZUOG4MkDgbE-unsplash_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-alfonso-escalante-1319242-2832251.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-alfonso-escalante-1319242-2832251.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-alfonso-escalante-1319242-2832251_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-alfonso-escalante-1319242-2832251.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-souvenirpixels-1487010.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-souvenirpixels-1487010.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-souvenirpixels-1487010_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-souvenirpixels-1487010.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-pixabay-39896.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-pixabay-39896.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-pixabay-39896_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-pixabay-39896.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-surender-singh-561453-1317013.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-surender-singh-561453-1317013.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-surender-singh-561453-1317013_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/pexels-surender-singh-561453-1317013.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/leftImg8bit_val_frankfurt_frankfurt_000001_010600_leftImg8bit_image.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/leftImg8bit_val_frankfurt_frankfurt_000001_010600_leftImg8bit_ours.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/leftImg8bit_val_frankfurt_frankfurt_000001_010600_leftImg8bit_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/leftImg8bit_val_frankfurt_frankfurt_000001_010600_leftImg8bit_ours.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/26.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/26.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/26_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/26.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="./images/wide/53.jpg">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/53.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bottom">
+            <div class="cmpcontent">
+              <img src="./images/wide/53_init.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/wide/53.png">
+            </div>
+          </div>
+        </div> -->
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="comparison" width="100%" src="./images/fig_comparison.png" alt="Qualitative comparison of patch-based depth estimation models"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qualitative comparison of patch-based depth estimation models (PatchFusion, PatchREfiner and PRO (ours)) for high-resolution images. </b> 
+        PatchRefiner and PRO (ours) also visualize the residuals to effectively highlight depth continuity issues in the 4th and 6th columns. 
+        All models performed depth estimations on $4\times4$ patches of the 1st and 3rd input images. 
+        Zoom-in can help distinguish the grid lines (depth discontinuities) of the $4\times4$ patches. 
+        Our proposed PRO achieves smooth boundary transitions without depth discontinuity artifacts along the grid boundaries.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract. -->
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+          <!-- <div class="column is-full"> -->
+            <div class="column is-four-fifths">
+              <h2 class="title is-3">Abstract</h2>
+              <div class="content has-text-justified" style="margin-bottom: 40px;">
+                Zero-shot depth estimation (DE) models exhibit strong generalization performance as they are trained on large-scale datasets. 
+                However, existing models struggle with high-resolution images due to the discrepancy in image resolutions of training (with smaller resolutions) and inference (for high resolutions). 
+                Processing them at full resolution leads to decreased estimation accuracy on depth with tremendous memory consumption, while downsampling to the training resolution results in blurred edges in the estimated depth images. 
+                Prevailing high-resolution depth estimation methods adopt a patch-based approach, which introduces depth discontinuity issues when reassembling the estimated depth patches and results in test-time inefficiency. 
+                Additionally, to obtain fine-grained depth details, these methods rely on synthetic datasets due to the real-world sparse ground truth depth, leading to poor generalizability. 
+                To tackle these limitations, we propose <b>Patch Refine Once (PRO) </b>, an efficient and generalizable tile-based framework. 
+                Our PRO consists of two key components: 
+                <b>(i) Grouped Patch Consistency Training </b> that enhances test-time efficiency while mitigating the depth discontinuity problem by jointly processing four overlapping patches and enforcing a consistency loss on their overlapping regions within a single backpropagation step, and 
+                <b>(ii) Bias Free Masking </b>that prevents the DE models from overfitting to dataset-specific biases, enabling better generalization to real-world datasets even after training on synthetic data. 
+                Zero-shot evaluation on Booster, ETH3D, Middlebury 2014, and NuScenes demonstrates into which our PRO can be well harmonized, making their DE capabilities still effective for the grid input of high-resolution images with little depth discontinuities at the grid boundaries. Our PRO runs fast at inference time.
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="main_fig" width="100%" src="./images/main_fig_1.png" alt="Overview of the framework."/>
+      <h2 class="subtitle has-text-centered">
+        Overview of the framework.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Method. -->
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+          <!-- <div class="column is-full"> -->
+            <div class="column is-four-fifths">
+              <h2 class="title is-3">Method</h2>
+              <div class="content has-text-justified" style="margin-bottom: 40px;">
+                <h3 class="title has-text-centered">
+                  1. Grouped Patch Consistency Training
+                </h3>
+                Patch-based mthods suffer from depth discontinuity problems (e.g. boundary artifacts along grid boundaries) which occur when independent depth estimation patches are reassembled 
+                to construct a complete (whole) depth map because depth continuity is maintained within each patch but not between patches. 
+                To address the boundary artifacts introduced by patch-wise refinement, we propose a simple yet effective <b>Grouped Patch Consistency Training (GPCT) </b> strategy 
+                that ensures depth consistency across patch boundaries. We divide the training sample into overlapping patches (e.g. (A, B, C, and D in (b) part of the above figure), 
+                so that each patch overlaps with its neighbors. After refining each patch independently, we apply a depth consistency loss to enforce consistency between 
+                the depth refinement results of overlapping patches.
+                Since our method computes the loss using all four patches simultaneously, every backward propagation step enforces consistency at all boundaries.
+                By training with this GPCT strategy, our PRO model mitigates boundary artifacts without requiring additional refinement during inference, 
+                allowing efficient patch-wise depth estimation, as only a single refinement step per patch (i.e., <b>"One Look"</b>) is required.
+                
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="time" width="75%" src="./images/time.png" alt="Performance, Efficiency comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Performance and efficiency comparison on Middlebury 2014 dataset.</b> The area of each circle represents the inference time. 
+        Circles of the same color represent the same model with different patch numbers ($\mathrm{P}=16$ for small-sized yellow and grey circles, $\mathrm{P}=177$ for large-sized yellow and grey circles).
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="gpct" width="75%" src="./images/supple_images_gpct_site.png" alt="gpct comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qualitative comparisons of GPCT's impact.</b> We compare PRO (Ours) with the model trained without GPCT. We also visualize the residuals to highlight the presence of artifacts more effectively.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<!-- Method-2. -->
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+          <!-- <div class="column is-full"> -->
+            <div class="column is-four-fifths">
+              <!-- <h2 class="title is-3">Method</h2> -->
+              <div class="content has-text-justified" style="margin-bottom: 40px;">
+                <h3 class="title has-text-centered">
+                  2. Bias Free Masking
+                </h3>
+                To utilize dense GT depth when training depth refinement models for fine-grained details, 
+                we use a synthetic dataset such as the UnrealStereo4K Dataset. 
+                However, the UnrealStereo4K dataset, which provides 4K resolutions, annotates the depths of transparent objects as the depths of their backgrounds (e.g., window objects in the below figure), 
+                which becomes a specific bias to the dataset. 
+
+                <section class="hero teaser">
+                  <div class="container is-max-desktop">
+                    <div class="hero-body">
+                      <img id="data_ex" width="50%" src="./images/data_ex.png" alt="Overview of the framework." style="display: block; margin: 0 auto;"/>
+                      <!-- <h2 class="subtitle has-text-centered"> -->
+                      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+                        Labelling error examples in UnrealStereo4K dataset.
+                      <!-- </h2> -->
+                      </figcaption>
+                    </div>
+                  </div>
+                </section>
+
+                To maintain the benefits of dense depth labeling while avoiding overfitting to the dataset-specific biases, 
+                we propose <b>Bias Free Masking (BFM)</b> that uses the prior knowledge of the pretrained zero-shot MDE models. 
+                That is, the strategy of BFM is to exclude the unreliable regions corresponding to the incorrect GT depths for the transparent objects in the synthetic dataset (UnrealStereo4K) during training. 
+                To prevent the exclusion of critical edge regions necessary for refinement, we utilize the edge information from both $ \mathbf{D}_{\mathrm{c}} $ (coarse depth form $\Psi$) and $ \mathbf{D}_{\mathrm{gt}} $ (ground truth depth) 
+                to construct the final reliable mask, BFM. This ensures that the unreliable regions due to large discrepancies between $ \mathbf{D}_{\mathrm{c}} $ and $ \mathbf{D}_{\mathrm{gt}} $ can be ignored, 
+                while preserving essential edge details for training. Consequently, the loss is computed only over reliable regions via a masked loss function, allowing us to mitigate artifacts in transparent areas, as demonstrated in the figure below.
+
+                
+                <br>
+
+
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="ab" width="75%" src="./images/supple_images_ab.png" alt="ablation comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qualitative comparisons of BFM's impact.</b> We compare PRO (Ours) with the model trained without BFM. We also visualize the residuals to highlight the presence of artifacts more effectively.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="column is-full">
+              <h2 class="title is-3">Comparisons with other methods</h2>
+              <div class="content has-text-justified" style="margin-bottom: 40px;">
+                We train recent SOTA depth refinement models and our PRO model on a synthetic dataset to get the advantage of dense GT depth for a fair comparison.
+                At test time, we evaluate its zero-shot performance on four real datasets to demonstrate generalizability.
+                All methods utilize DepthAnythingv2 as the base depth estimation model.
+              </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="quan" width="100%" src="./images/quan_comp.PNG" alt="quantitative comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Quantitative comparison.</b> <b>Bold</b> indicates the best performacne in each metric.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="qual" width="100%" src="./images/qual_r.png" alt="qualitative comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qulitative comparisons for patch-wise DE methods.</b> We compare PRO (Ours) with BoostingDepth, PatchFusion (PF), and PatchRefiner (PR). 
+        The time displayed in the leftmost depth column represents the inference time. Black rectangle area represents the transparent object region. Black arrows indicate patch boundaries. Zoom in for details.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="qual_supple_1" width="100%" src="./images/qual_supple.png" alt="supplementary qualitative comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qulitative comparisons for patch-wise DE methods.</b> We compare PRO (Ours) with BoostingDepth, PatchFusion (PF), and PatchRefiner (PR). 
+        The time displayed in the leftmost depth column represents the inference time. Black rectangle area represents the transparent object region. Black arrows indicate patch boundaries. Zoom in for details.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="qual_supple_2" width="100%" src="./images/qual_supple_2.png" alt="supplementary qualitative comparison" style="display: block; margin: 0 auto;"/>
+      <figcaption class="has-text-centered" style="font-size: 0.95rem; margin-top: 0.5rem;">
+        <b>Qulitative comparisons for patch-wise DE methods.</b> We compare PRO (Ours) with BoostingDepth, PatchFusion (PF), and PatchRefiner (PR). 
+        The time displayed in the top depth row represents the inference time. Black rectangle area represents the transparent object region. Black arrows indicate patch boundaries. Zoom in for details.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  $(window).on('load', function() {
+    bulmaCarousel.attach('#results-carousel-horizontal', {
+      slidesToScroll: 1,
+      slidesToShow: 2,
+      loop: true,
+      autoplay: true,
+      autoplaySpeed: 12000,
+    });
+
+    bulmaCarousel.attach('#results-carousel-vertical', {
+      slidesToScroll: 1,
+      slidesToShow: 3,
+      loop: true,
+      autoplay: true,
+    });
+
+
+    $(".twentytwenty-container-top").twentytwenty({
+      before_label: 'Input',
+      after_label: 'Ours',
+      default_offset_pct: 0.75,
+    });
+
+    $(".twentytwenty-container-bottom").twentytwenty({
+      before_label: 'DepthAnythingv2',
+      after_label: 'Ours',
+      default_offset_pct: 0.5,
+    });
+
+    $('.results-carousel').css({
+      'max-height': '2000px',
+      'visibility': 'visible'
+    });
+  });
+</script>
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Citation</h2>
+    <pre class="selectable"><code>@InProceedings{ke2023repurposing,
+        title={Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation},
+        author={Bingxin Ke and Anton Obukhov and Shengyu Huang and Nando Metzger and Rodrigo Caye Daudt and Konrad Schindler},
+        booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+        year={2024}
+}</code></pre>
+  </div>
+</section> -->
+
+<!-- <footer class="footer pt-4 pb-0">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template based on
+            <a href="https://github.com/nerfies/nerfies.github.io">
+              Nerfies
+            </a>
+            and licensed under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              CC-BY-SA-4.0
+            </a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer> -->
+
+<footer class="footer">
+  <div class="container">
+      <div class="content has-text-centered">
+          <a target="_blank" rel="noopener noreferrer" class="icon-link"
+             href="https://arxiv.org/abs/2411.10788">
+              <i class="fas fa-file-pdf"></i>
+          </a>
+          <a target="_blank" rel="noopener noreferrer" class="icon-link" href="https://github.com/KAIST-VICLab"
+             class="external-link" disabled>
+              <i class="fab fa-github"></i>
+          </a>
+      </div>
+      <div class="columns is-centered">
+          <div class="column is-8">
+              <div class="content">
+                  <p>
+                      We thank the authors of <a target="_blank" rel="noopener noreferrer"
+                                                 href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> and
+                      <a target="_blank" rel="noopener noreferrer"
+                         href="https://github.com/marigoldmonodepth/marigoldmonodepth.github.io/tree/main">Marigold</a>
+                      that
+                      kindly open sourced the template of this website. Website template licensed under
+                      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                          CC-BY-SA-4.0
+                      </a>.
+                      Please visit our <a target="_blank" rel="noopener noreferrer"
+                                          href="https://github.com/KAIST-VICLab">VIC-Lab</a> for more interesting
+                      researches.
+                  </p>
+              </div>
+          </div>
+          <!-- <a href="https://mapmyvisitors.com/web/1bwmv" title="Visit tracker"><img
+                  src="https://mapmyvisitors.com/map.png?d=DJ4AbzU_cK5trk4CYHZY9fn2NTXA2_R0Guj2lFqZzJY&cl=ffffff"/></a> -->
+      </div>
+  </div>
+</footer>
+
+</body>
+</html>
